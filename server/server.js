@@ -38,14 +38,14 @@ function uploadToCloudinary(fileBuffer, folder) {
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+app.use(cors({
+  origin: "https://sv-pddu.vercel.app",
+  credentials: true,
+}));
+
 // DB connection + seed
 connectDB();
 seedUsers();
-
-app.use(cors({
-  origin: process.env.CLIENT_URL || '*', // add Vercel URL later
-  credentials: true,
-}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
