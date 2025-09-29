@@ -42,7 +42,11 @@ const PORT = process.env.PORT || 3001;
 connectDB();
 seedUsers();
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL || '*', // add Vercel URL later
+  credentials: true,
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -292,4 +296,4 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Server running`));
