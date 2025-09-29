@@ -11,12 +11,15 @@ export default function StudentProfile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const BASE_URL = import.meta.env.VITE_SERVER_URL;
+  // const BASE_URL = "http://localhost:3001/api";
+
   const { user } = useContext(AuthContext); // user.isAdmin = true/false
 
   useEffect(() => {
     const fetchStudent = async () => {
       try {
-        const res = await fetch(`http://localhost:3001/api/students/${studentId}`);
+        const res = await fetch(`${BASE_URL}/students/${studentId}`);
         if (!res.ok) throw new Error("Failed to fetch student details");
         const data = await res.json();
         setStudent(data);

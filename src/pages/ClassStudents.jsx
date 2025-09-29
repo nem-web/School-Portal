@@ -13,8 +13,9 @@ export default function ClassStudents() {
     const fetchStudents = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3001/api/students?class=${classNumber}`
+          `${import.meta.env.VITE_SERVER_URL}/students?class=${classNumber}`
         );
+
         if (!res.ok) throw new Error("Failed to fetch students");
         const data = await res.json();
         data.sort((a, b) => a.name.localeCompare(b.name));

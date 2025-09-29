@@ -21,27 +21,41 @@ export default function AdminHome({ onSelectStudent }) {
   const { user } = useContext(AuthContext); // user.isAdmin = true/false
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/students")
-      .then((res) => res.json())
-      .then((data) => {
-        setAllStudents(data);
-      })
-      .catch((err) => {
-        console.error("Error fetching students:", err);
-        setLoading(false);
-      });
-  }, []);
+  const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
+  fetch(`${BASE_URL}/students`)
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return res.json();
+    })
+    .then((data) => {
+      setAllStudents(data);
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.error("Error fetching students:", err);
+      setError("Failed to load student data. Please try again later.");
+      setLoading(false);
+    });
+}, []);
+
 
   const handleDelete = async (id) => {
-    try {
-      await fetch(`http://localhost:3001/api/students/${id}`, {
-        method: "DELETE",
-      });
-      setAllStudents((prev) => prev.filter((s) => s._id !== id));
-    } catch (error) {
-      console.error("Error deleting student:", error);
-    }
-  };
+  try {
+    const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
+    await fetch(`${BASE_URL}/students/${id}`, {
+      method: "DELETE",
+    });
+
+    setAllStudents((prev) => prev.filter((s) => s._id !== id));
+  } catch (error) {
+    console.error("Error deleting student:", error);
+  }
+};
+
 
  const handleSearch = () => {
     setSearchError(null);

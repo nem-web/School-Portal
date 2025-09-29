@@ -108,6 +108,8 @@ export default function Register() {
   // In a real app, this would come from react-router-dom
   const location = useLocation();
 
+  const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
   // const location = useLocation(); // Uncomment this in a full app with router
   
   const studentData = location.state?.studentData; // Data passed for editing
@@ -225,8 +227,8 @@ export default function Register() {
 
   try {
     const endpoint = isEditing
-      ? `http://localhost:3001/api/students/${studentData._id}`
-      : "http://localhost:3001/api/students";
+      ? `${BASE_URL}/students/${studentData._id}`
+      : `${BASE_URL}/students`;
     const method = isEditing ? "PUT" : "POST";
 
     const response = await fetch(endpoint, {

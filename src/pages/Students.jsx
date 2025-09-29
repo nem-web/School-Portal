@@ -8,29 +8,32 @@ export default function Students() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/students/class-strength")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        // Assuming the API returns an object like { classes: [...] }
-        if (Array.isArray(data.classes)) {
-          setClasses(data.classes);
-        } else {
-          // Fallback if the data is a direct array
-          setClasses(data);
-        }
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching class strength:", err);
-        setError("Failed to load class data. Please try again later.");
-        setLoading(false);
-      });
-  }, []);
+  const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
+  fetch(`${BASE_URL}/students/class-strength`)
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return res.json();
+    })
+    .then((data) => {
+      // Assuming the API returns an object like { classes: [...] }
+      if (Array.isArray(data.classes)) {
+        setClasses(data.classes);
+      } else {
+        // Fallback if the data is a direct array
+        setClasses(data);
+      }
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.error("Error fetching class strength:", err);
+      setError("Failed to load class data. Please try again later.");
+      setLoading(false);
+    });
+}, []);
+
 
   // console.log(classes);
 
