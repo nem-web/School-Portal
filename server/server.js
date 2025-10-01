@@ -38,10 +38,22 @@ function uploadToCloudinary(fileBuffer, folder) {
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://sv-pddu.vercel.app"
+];
+
 app.use(cors({
-  origin: "https://sv-pddu.vercel.app",
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 }));
+
 
 // DB connection + seed
 connectDB();
