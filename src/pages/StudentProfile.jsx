@@ -37,6 +37,16 @@ export default function StudentProfile() {
     navigate("/register", { state: { studentData: student } });
   };
 
+  // In StudentProfile.jsx
+  const handleViewIdCard = () => {
+      if (student) {
+          // Navigate to the ID card page with the student's ID in the URL
+          navigate(`/idcard/${student._id}`);
+      } else {
+          console.warn("Student data not loaded yet. Cannot navigate.");
+      }
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen">
@@ -74,14 +84,27 @@ export default function StudentProfile() {
         <div className="bg-white p-8 rounded-lg shadow-md max-w-3xl mx-auto">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-3xl font-bold">Student Profile</h1>
+            {/* The ID Card Button goes here */}
+            <button
+              onClick={handleViewIdCard}
+              className="id-card-button ml-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+            >
+              View ID Card
+            </button>
+            <button
+              onClick={() => window.print()}
+              className="print-button bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out"
+            >
+              🖨️ Print Profile
+            </button>
             {user?.isAdmin && (
               <button
                 onClick={handleEdit}
-                className="ml-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
+                className="edit-button ml-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
               >
                 Edit
               </button>
-            )}
+            )}  
           </div>
 
           <div className="text-center mb-6">
@@ -164,7 +187,7 @@ export default function StudentProfile() {
           <div className="mt-6 text-center">
             <Link
               to={`/students/${student.class}`}
-              className="text-blue-600 hover:underline"
+              className="no-print-header text-blue-600 hover:underline"
             >
               ← Back to class
             </Link>

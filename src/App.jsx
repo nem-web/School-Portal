@@ -11,6 +11,7 @@ import AdminHome from "./pages/admin/AdminHome";
 import { AuthProvider } from "./context/AuthContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import IdCard from "./components/IdCard";
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/admin" element={<AdminHome />} />
+        {/* In your App.jsx or routing file */}
+        <Route path="/idcard/:studentId" element={<IdCard />} />
       </Routes>
       <Footer />
     </AuthProvider>

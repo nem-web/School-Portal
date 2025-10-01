@@ -13,7 +13,7 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-gray-800 text-white p-4 flex justify-between items-center">
+    <header className="no-print-header bg-gray-800 text-white p-4 flex justify-between items-center">
       <div className="text-xl font-bold">School Portal</div>
       <nav className="flex space-x-4">
         <Link to="/" className="hover:text-gray-400">Home</Link>

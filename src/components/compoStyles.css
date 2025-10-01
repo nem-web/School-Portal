@@ -1,0 +1,28 @@
+@media print {
+  /* Set the page size to match a PAN card (ISO/IEC 7810 ID-1) */
+  @page {
+    size: 85.6mm 53.98mm;
+    margin: 0;
+  }
+  
+  /* Hide the print button and other screen-only elements */
+  .print-button {
+    display: none;
+  }
+
+  /* Make sure the container fits the page and nothing else shows */
+  body {
+    background-color: transparent !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Make sure the print container is the correct size */
+  .id-card-print-container {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    width: 85.6mm !important;
+    height: 53.98mm !important;
+    overflow: hidden;
+  }
+}
