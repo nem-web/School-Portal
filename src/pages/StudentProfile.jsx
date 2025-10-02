@@ -3,6 +3,8 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { AuthContext } from "../context/AuthContext";
+import { getCurrentClass } from "../classUtils.js";
+
 
 export default function StudentProfile() {
   const { studentId } = useParams();
@@ -12,7 +14,6 @@ export default function StudentProfile() {
   const [error, setError] = useState(null);
 
   const BASE_URL = import.meta.env.VITE_SERVER_URL;
-  // const BASE_URL = "http://localhost:3001/api";
 
   const { user } = useContext(AuthContext); // user.isAdmin = true/false
 

@@ -12,6 +12,7 @@ import { AuthProvider } from "./context/AuthContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import IdCard from "./components/IdCard";
+import Other from "./pages/admin/Other";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/admin" element={<AdminHome />} />
+        <Route path="/other-admin" element={<Other />} />
         {/* In your App.jsx or routing file */}
         <Route path="/idcard/:studentId" element={<IdCard />} />
       </Routes>

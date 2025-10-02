@@ -271,24 +271,34 @@ app.put(
   }
 );
 
-// Class strength aggregation
+// Class strength aggregation (only verified students)
 app.get('/api/students/class-strength', async (req, res) => {
   try {
     const classStrengths = await Student.aggregate([
+      { $match: { isVerified: true } }, // ✅ only verified students
       { $group: { _id: '$class', studentsCount: { $sum: 1 } } },
       { $project: { _id: 0, name: '$_id', studentsCount: 1 } },
       { $sort: { name: 1 } },
     ]);
+
     res.json({ classes: classStrengths });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Server error' });
   }
 });
 
+
 // Get students
 app.get('/api/students', async (req, res) => {
   try {
-    const filter = req.query.class ? { class: req.query.class } : {};
+    const filter = { isVerified: true }; // ✅ always filter verified students
+    
+    // Add class filter if provided
+    if (req.query.class) {
+      filter.class = req.query.class;
+    }
+
     const students = await Student.find(filter);
     res.status(200).json(students);
   } catch {

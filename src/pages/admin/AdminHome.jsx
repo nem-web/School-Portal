@@ -28,8 +28,16 @@ export default function AdminHome() {
                 const data = await res.json();
                 
                 // --- Replace MOCK_STUDENTS with the result of: await res.json() ---
-                const verifiedData = data.filter(student => student.isVerified);
-                const unverifiedData = data.filter(student => !student.isVerified);
+                // Only verified and not graduated
+                const verifiedData = data.filter(
+                student => student.isVerified && !student.isGraduated
+                );
+
+                // Only unverified and not graduated
+                const unverifiedData = data.filter(
+                student => !student.isVerified && !student.isGraduated
+                );
+
                 setAllStudents(verifiedData);
                 setAllUnverifiedStudents(unverifiedData);
                 setLoading(false);

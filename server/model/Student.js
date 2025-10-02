@@ -22,6 +22,7 @@ const studentSchema = new mongoose.Schema({
   state: String,
   class: String,
   isVerified: { type: Boolean, default: false },
+  isGraduated: { type: Boolean, default: false },
   serialNumber: { type: String, unique: true, required: true },
   admissionYear: { type: String, required: true },
 

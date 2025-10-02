@@ -4,7 +4,6 @@ import { AuthContext } from "../context/AuthContext";
 // ----------------------------------------------------
 
 export default function Header() {
-  // Assuming AuthContext provides { user: { isAdmin: boolean }, logout: function }
   const { user, logout } = useContext(AuthContext); 
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,14 +31,12 @@ export default function Header() {
   );
 
   // Inline SVG components to replace react-icons
-  // --- START INLINE SVGs ---
   const IoIosLogIn = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M11 7H13V17H11zM18.8 12.8L16 15.6V13H8V11H16V8.4L18.8 11.2C19.2 11.6 19.2 12.4 18.8 12.8M21 3H3C2.45 3 2 3.45 2 4V20C2 20.55 2.45 21 3 21H21C21.55 21 22 20.55 22 20V4C22 3.45 21.55 3 21 3M20 19H4V5H20V19Z"/></svg>;
   const RiLogoutBoxFill = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M16 11H4V13H16V16L20 12L16 8V11M20 19H12V21H20C21.1 21 22 20.1 22 19V5C22 3.9 21.1 3 20 3H12V5H20V19Z"/></svg>;
   const FaUserShield = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2M15 11.5L13.5 13L15 14.5L12 17.5L9 14.5L10.5 13L9 11.5L12 8.5L15 11.5Z"/></svg>;
   const FaBars = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M3 18H21V16H3V18M3 13H21V11H3V13M3 6V8H21V6H3Z"/></svg>;
   const FaTimes = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"/></svg>;
-  // --- END INLINE SVGs ---
-
+  const FaEllipsisH = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10M19 10C17.9 10 17 10.9 17 12C17 13.1 17.9 14 19 14C20.1 14 21 13.1 21 12C21 10.9 20.1 10 19 10M5 10C3.9 10 3 10.9 3 12C3 13.1 3.9 14 5 14C6.1 14 7 13.1 7 12C7 10.9 6.1 10 5 10Z"/></svg>;
 
   return (
     <header className="no-print-header sticky top-0 z-50 bg-gray-800 shadow-xl">
@@ -56,15 +53,24 @@ export default function Header() {
             <NavItem key={link.to} to={link.to} label={link.label} />
           ))}
           
-          {/* Admin Panel Link */}
+          {/* Admin Panel and Other Link */}
           {user?.isAdmin && (
-            <Link 
-              to="/admin-panel" 
-              className="flex items-center space-x-2 text-white bg-blue-600 px-3 py-1.5 rounded-full text-sm font-semibold hover:bg-blue-700 transition"
-            >
-              <FaUserShield className="w-4 h-4" />
-              <span>Admin Panel</span>
-            </Link>
+            <>
+              <Link 
+                to="/admin" 
+                className="flex items-center space-x-2 text-white bg-blue-600 px-3 py-1.5 rounded-full text-sm font-semibold hover:bg-blue-700 transition"
+              >
+                <FaUserShield className="w-4 h-4" />
+                <span>Admin Panel</span>
+              </Link>
+              <Link 
+                to="/other-admin" 
+                className="flex items-center space-x-2 text-white bg-gray-600 px-3 py-1.5 rounded-full text-sm font-semibold hover:bg-gray-700 transition"
+              >
+                <FaEllipsisH className="w-4 h-4" />
+                <span>Other</span>
+              </Link>
+            </>
           )}
         </nav>
         
@@ -114,16 +120,26 @@ export default function Header() {
             />
           ))}
 
-          {/* Admin Panel Link (Mobile) */}
+          {/* Admin Panel and Other Link (Mobile) */}
           {user?.isAdmin && (
-            <Link 
-              to="/admin" 
-              onClick={() => setIsMenuOpen(false)}
-              className="flex items-center space-x-3 text-white bg-blue-600 px-3 py-2 rounded-lg text-base font-semibold hover:bg-blue-700 transition mt-4"
-            >
-              <FaUserShield className="w-5 h-5" />
-              <span>Admin Panel</span>
-            </Link>
+            <>
+              <Link 
+                to="/admin" 
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center space-x-3 text-white bg-blue-600 px-3 py-2 rounded-lg text-base font-semibold hover:bg-blue-700 transition mt-4"
+              >
+                <FaUserShield className="w-5 h-5" />
+                <span>Admin Panel</span>
+              </Link>
+              <Link 
+                to="/other-admin" 
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center space-x-3 text-white bg-gray-600 px-3 py-2 rounded-lg text-base font-semibold hover:bg-gray-700 transition"
+              >
+                <FaEllipsisH className="w-5 h-5" />
+                <span>Other</span>
+              </Link>
+            </>
           )}
         </div>
       </div>
