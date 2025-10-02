@@ -15,8 +15,8 @@ const useReactToPrint = ({ content, documentTitle, pageStyle }) => {
         }
     };
 };
-// Mock BASE_URL (Replace with import.meta.env.VITE_SERVER_URL in your project)
-const BASE_URL = 'https://mock-api.yourserver.com/api'; 
+
+const BASE_URL = import.meta.env.VITE_SERVER_URL; 
 
 
 const IdCard = () => {
@@ -29,18 +29,24 @@ const IdCard = () => {
     useEffect(() => {
         const fetchStudent = async () => {
             // Your real fetch logic would go here:
-            // const res = await fetch(`${BASE_URL}/students/${studentId}`);
+            const res = await fetch(`${BASE_URL}/students/${studentId}`);
+            const data = await res.json();
+            // console.log("Fetching student data from:", data);
 
             // Mock Data for demonstration
             const MOCK_DATA = {
-                studentPhoto: "https://placehold.co/150x150/003366/ffffff?text=PHOTO",
-                name: "DVBDSH KUMAR",
-                class: "11",
-                serialNumber: "2022DVBD01012005",
-                dob: "2005-01-01",
-                parents: [{ relation: 'Father', name: 'RAJESH SINGH' }],
-                rollNumber: '007', 
-                validUpto: '10/2026',
+                studentPhoto: data.studentPhoto,
+                name: data.name,
+                class: data.class,
+                admissionYear: data.admissionYear,
+                serialNumber: data.serialNumber,
+                dob: data.dob,
+                parents: data.parents,
+                rollNumber: data.rollNumber,
+                validUpto: (data.admissionYear && data.class)
+                    ? `${Number(data.admissionYear) + (12 - Number(data.class))}-03-31`
+                    : "N/A",
+
             };
 
             try {
@@ -91,8 +97,8 @@ const IdCard = () => {
         validUpto = 'N/A',
         fathersName = studentData.parents?.find(p => p.relation === 'Father')?.name || 'N/A',
         qrCode = 'https://placehold.co/60x60/f8f8f8/000000?text=QR',
-        schoolName = 'SPRINGDALE ACADEMY',
-        schoolWebsite = 'www.springdaleacademy.com',
+        schoolName = 'SV PDDU Inter College',
+        schoolWebsite = 'www.svpdduintercollege.com',
         principalSignature = "Principal's Signature"
     } = studentData;
 

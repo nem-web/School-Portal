@@ -8,22 +8,33 @@ export const AuthProvider = ({ children }) => {
   // Load user from localStorage on app start
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
   }, []);
 
-  // Login function (for demo, no real API)
+  // Keep localStorage in sync with user state
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+    }
+  }, [user]);
+
+  // Login function (demo version)
   const login = (username, password) => {
-    // In real app, call your backend API here
-    // Example: fetch('/api/login', {method:'POST', body:{username,password}})
-    // For demo, just accept username: admin, password: admin
-    if ((username === "admin" && password === "admin") || (username === "user" && password === "user")) {
+    // Replace this with real API in production
+    if (
+      (username === "admin" && password === "admin") ||
+      (username === "user" && password === "user")
+    ) {
       const userData = {
         username,
-        isAdmin: username === "admin" ? true : false,
+        isAdmin: username === "admin",
       };
       setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
-      return { success: true };
+      return { success: true, user: userData };
     } else {
       return { success: false, message: "Invalid credentials" };
     }
@@ -31,7 +42,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user");
+    // localStorage is cleared automatically in the effect above
+    return { success: true };
   };
 
   return (
