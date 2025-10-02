@@ -2,13 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from '../../context/AuthContext'; // Ensure this path is correct
 
-// MOCK: Placeholder data structure for students
-const MOCK_STUDENTS = [
-    { _id: "68da1ae6bbac5826eefc3da7", serialNumber: "2023SN001", name: "Alice Johnson", class: "12", dob: "2006-05-15" },
-    { _id: "68da1ae6bbac5826eefc3da8", serialNumber: "2023SN002", name: "Bob Williams", class: "11", dob: "2007-11-20" },
-    { _id: "68da1ae6bbac5826eefc3da9", serialNumber: "2024SN003", name: "Charlie Brown", class: "10", dob: "2008-02-01" },
-];
-
 /**
  * AdminHome component provides a search interface for students and a list of all students.
  */
@@ -94,6 +87,11 @@ export default function AdminHome() {
             if (!res.ok) throw new Error("Update failed");
 
             const updatedStudent = await res.json();
+
+            // Update state locally
+            setAllStudents((prev) =>
+            prev.map((s) => (s._id === id ? { ...s, isVerified: true } : s))
+            );
 
         } catch (error) {
             console.error("Error verifying student:", error);
