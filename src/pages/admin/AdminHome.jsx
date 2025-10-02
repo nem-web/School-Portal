@@ -14,6 +14,7 @@ const MOCK_STUDENTS = [
  */
 export default function AdminHome() {
     const [allStudents, setAllStudents] = useState([]);
+    const [allUnverifiedStudents, setAllUnverifiedStudents] = useState([]);
     const [searchId, setSearchId] = useState('');
     const [searchError, setSearchError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -34,7 +35,10 @@ export default function AdminHome() {
                 const data = await res.json();
                 
                 // --- Replace MOCK_STUDENTS with the result of: await res.json() ---
-                setAllStudents(data);
+                const verifiedData = data.filter(student => student.isVerified);
+                const unverifiedData = data.filter(student => !student.isVerified);
+                setAllStudents(verifiedData);
+                setAllUnverifiedStudents(unverifiedData);
                 setLoading(false);
             } catch (err) {
                 console.error("Error fetching students:", err);
@@ -68,6 +72,33 @@ export default function AdminHome() {
             console.error("Error deleting student:", error);
             // Use a custom UI element instead of alert in production
             alert("Failed to delete student. Check console for details."); 
+        }
+    };
+
+    const handleVerify = async (id) => {
+        if (!window.confirm("Are you sure you want to Verify this student?")) {
+            return;
+        }
+
+        try {
+            const BASE_URL = import.meta.env.VITE_SERVER_URL; // Mock URL reference
+
+            const res = await fetch(`${BASE_URL}/students/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ isVerified: true }),
+            });
+
+            if (!res.ok) throw new Error("Update failed");
+
+            const updatedStudent = await res.json();
+
+        } catch (error) {
+            console.error("Error verifying student:", error);
+            // Use a custom UI element instead of alert in production
+            alert("Failed to verify student. Check console for details.");
         }
     };
 
@@ -142,7 +173,7 @@ export default function AdminHome() {
                 <h3 className="text-2xl font-bold text-gray-800 mb-6 flex justify-between items-center">
                     All Unverified Students
                     <span className="text-blue-600 text-sm font-semibold bg-blue-100 px-3 py-1 rounded-full">
-                        Total: {allStudents.length}
+                        Total: {allUnverifiedStudents.length}
                     </span>
                 </h3>
                 
@@ -151,7 +182,6 @@ export default function AdminHome() {
                         <thead className="bg-blue-50">
                             <tr>
                                 <th className="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">S.No</th>
-                                <th className="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Serial No.</th>
                                 <th className="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Name</th>
                                 <th className="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Class</th>
                                 <th className="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">DOB</th>
@@ -159,17 +189,16 @@ export default function AdminHome() {
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-100">
-                            {allStudents.length === 0 ? (
+                            {allUnverifiedStudents.length === 0 ? (
                                 <tr>
                                     <td colSpan="6" className="px-6 py-8 text-center text-gray-500 text-lg italic">
                                         No students registered yet.
                                     </td>
                                 </tr>
                             ) : (
-                                allStudents.map((s, i) => (
+                                allUnverifiedStudents.map((s, i) => (
                                     <tr key={s._id} className="hover:bg-blue-50/50 transition duration-150">
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{i + 1}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-mono">{s.serialNumber}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">{s.name}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">Class {s.class}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{s.dob}</td>
@@ -185,6 +214,12 @@ export default function AdminHome() {
                                                 className="text-red-600 hover:text-red-800 font-semibold transition duration-150 cursor-pointer ml-2 hover:underline"
                                             >
                                                 Delete
+                                            </button>
+                                            <button
+                                                onClick={() => handleVerify(s._id)}
+                                                className="text-green-600 hover:text-green-800 font-semibold transition duration-150 cursor-pointer ml-2 hover:underline"
+                                            >
+                                                Verify
                                             </button>
                                         </td>
                                     </tr>
