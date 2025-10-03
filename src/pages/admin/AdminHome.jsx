@@ -26,9 +26,8 @@ export default function AdminHome() {
                 const res = await fetch(`${BASE_URL}/students`);
                 if (!res.ok) throw new Error("Failed to fetch students");
                 const data = await res.json();
-                console.log("Fetched students:", data);
+                // console.log("Fetched students:", data);
                 
-                // --- Replace MOCK_STUDENTS with the result of: await res.json() ---
                 // Only verified and not graduated
                 const verifiedData = data.filter(
                 student => student.isVerified && !student.isGraduated

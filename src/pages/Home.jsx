@@ -80,7 +80,7 @@ export default function Home() {
               <span className="text-blue-500 mr-2">📍</span> 456 Education Lane, Metropolis, 10001
             </div>
           </div>
-          <button onClick={() => window.location.href = '/register'} className="mt-8 bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-700 transition">
+          <button onClick={() => window.location.href = '/'} className="mt-8 bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-700 transition">
             Send an Inquiry
           </button>
         </div>

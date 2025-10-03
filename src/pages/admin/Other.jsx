@@ -79,36 +79,58 @@ export default function Other() {
   // --- Modal Logic ---
 
   const handleConfirmAction = () => {
-    if (passwordInput !== ADMIN_PASSWORD) {
-      setModalError('Incorrect security password. Operation aborted.');
-      return;
-    }
+  if (passwordInput !== ADMIN_PASSWORD) {
+    setModalError("Incorrect security password. Operation aborted.");
+    return;
+  }
 
-    setModalError(null);
-    setIsModalOpen(false);
-    setLoading(true);
-    setMessage(null);
+  setModalError(null);
+  setIsModalOpen(false);
+  setLoading(true);
+  setMessage(null);
 
-    if (modalAction === 'promote') {
-      // Mock logic for promoting ALL eligible students
-      setTimeout(() => {
+  if (modalAction === "promote") {
+    // Promote all eligible students
+    fetch(`${import.meta.env.VITE_SERVER_URL}/students/promote`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to promote students");
+        return res.json();
+      })
+      .then((data) => {
         setLoading(false);
-        setMessage({ 
-          type: 'success', 
-          text: `Successfully promoted all eligible students to the next class level (e.g., Class 6 to 7, 11 to 12).` 
-        });
-      }, 2000);
-    } else if (modalAction === 'delete') {
-      // Mock logic for deleting graduates of the selected year
-      setTimeout(() => {
+        setMessage({ type: "success", text: data.message });
+      })
+      .catch((error) => {
         setLoading(false);
-        setMessage({ 
-          type: 'warning', 
-          text: `Successfully archived/deleted records for all students from the admission year ${deleteYear}.` 
-        });
-      }, 2000);
-    }
-  };
+        setMessage({ type: "error", text: error.message });
+      });
+
+  } else if (modalAction === "delete") {
+    // Delete graduates of the selected admission year
+    fetch(`${import.meta.env.VITE_SERVER_URL}/students/delete/${deleteYear}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to delete graduate records");
+        return res.json();
+      })
+      .then((data) => {
+        setLoading(false);
+        setMessage({ type: "warning", text: data.message });
+      })
+      .catch((error) => {
+        setLoading(false);
+        setMessage({ type: "error", text: error.message });
+      });
+  }
+};
+
 
   const handlePromotionClick = () => {
     setModalAction('promote');

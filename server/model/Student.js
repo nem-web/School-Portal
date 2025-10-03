@@ -20,7 +20,7 @@ const studentSchema = new mongoose.Schema({
   block: String,
   district: String,
   state: String,
-  class: String,
+  class: { type: Number, required: true },
   isVerified: { type: Boolean, default: false },
   isGraduated: { type: Boolean, default: false },
   serialNumber: { type: String, unique: true, required: true },

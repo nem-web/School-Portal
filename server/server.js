@@ -276,6 +276,7 @@ app.get('/api/students/class-strength', async (req, res) => {
   try {
     const classStrengths = await Student.aggregate([
       { $match: { isVerified: true } }, // ✅ only verified students
+      { $match: { isGraduated: false } }, // ✅ only verified students
       { $group: { _id: '$class', studentsCount: { $sum: 1 } } },
       { $project: { _id: 0, name: '$_id', studentsCount: 1 } },
       { $sort: { name: 1 } },
@@ -299,6 +300,45 @@ app.get('/api/students', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch student data' });
   }
 });
+
+// Promote students route
+app.post("/api/students/promote", async (req, res) => {
+  try {
+    const students = await Student.find({ isGraduated: { $ne: true } });
+
+    const updates = students.map(async (student) => {
+      if (student.class < 12) {
+        student.class = student.class + 1;
+      } else {
+        student.isGraduated = true;
+      }
+      return student.save();
+    });
+
+    await Promise.all(updates);
+
+    res.json({ message: "All eligible students have been promoted successfully." });
+  } catch (err) {
+    console.error("Promotion error:", err);
+    res.status(500).json({ error: "Server error during promotion" });
+  }
+});
+
+// Delete students by admission year
+app.delete("/api/students/delete/:year", async (req, res) => {
+  try {
+    const { year } = req.params;
+
+    const result = await Student.deleteMany({ admissionYear: Number(year) });
+
+    res.json({ message: `Deleted ${result.deletedCount} student(s) from admission year ${year}.` });
+  } catch (err) {
+    console.error("Delete error:", err);
+    res.status(500).json({ error: "Server error during delete" });
+  }
+});
+
+
 
 
 
