@@ -292,19 +292,15 @@ app.get('/api/students/class-strength', async (req, res) => {
 // Get students
 app.get('/api/students', async (req, res) => {
   try {
-    const filter = { isVerified: true }; // ✅ always filter verified students
-    
-    // Add class filter if provided
-    if (req.query.class) {
-      filter.class = req.query.class;
-    }
-
+    const filter = req.query.class ? { class: req.query.class, isGraduated: false } : { isGraduated: false };
     const students = await Student.find(filter);
     res.status(200).json(students);
   } catch {
     res.status(500).json({ error: 'Failed to fetch student data' });
   }
 });
+
+
 
 // Get student by ID
 app.get('/api/students/:id', async (req, res) => {
