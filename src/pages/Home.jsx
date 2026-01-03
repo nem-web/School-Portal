@@ -1,90 +1,156 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
+// Mock Data
+const HOSTEL_STRENGTH = [
+  { id: 1, className: "Class 8", strength: 12 },
+  { id: 2, className: "Class 9", strength: 18 },
+  { id: 3, className: "Class 10", strength: 25 },
+  { id: 4, className: "Class 11", strength: 30 },
+  { id: 5, className: "Class 12", strength: 28 },
+];
+
+// Placeholder Cloudinary Images
+const IMAGES = [
+  "https://res.cloudinary.com/dlhauofrz/image/upload/v1759077818/cld-sample-5.jpg",
+  "https://res.cloudinary.com/dlhauofrz/image/upload/v1759077819/main-sample.png",
+  "https://res.cloudinary.com/dlhauofrz/image/upload/v1759077818/cld-sample-3.jpg",
+  "https://res.cloudinary.com/dlhauofrz/image/upload/v1759077817/cld-sample.jpg",
+];
 
 export default function Home() {
+  // Calculation for total
+  const totalStudents = HOSTEL_STRENGTH.reduce((sum, item) => sum + item.strength, 0);
+
   return (
-    <div className="flex flex-col min-h-[84vh] bg-gray-50 font-sans">
+    <div className="flex flex-col min-h-screen bg-gray-50 font-sans pb-24 lg:pb-0">
       
-      {/* Hero Section */}
-      <main className="flex-grow flex flex-col items-center justify-center p-6 md:p-12 text-center bg-gradient-to-br from-blue-50 to-blue-200">
-        <div className="max-w-4xl mx-auto py-16">
-          <h1 className="text-5xl md:text-7xl font-extrabold text-blue-800 tracking-tight mb-4 animate-fadeInDown">
-            Welcome to Springdale Academy
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-700 mb-10 font-light animate-fadeIn">
-            Nurturing knowledge, inspiring futures. Your gateway to resources and information.
-          </p>
-          <button onClick={() => window.location.href = '/register'} className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold py-3 px-10 rounded-full shadow-xl transition transform hover:scale-105 hover:shadow-blue-400/50 text-lg animate-fadeInUp">
-            Get Started
-          </button>
-        </div>
-      </main>
+      {/* ---------------- CSS for Scrolling Animation ---------------- */}
+      <style>{`
+        @keyframes scroll-strip {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); } 
+        }
+        .animate-scroll-strip {
+          animation: scroll-strip 40s linear infinite; /* Slowed down for elegance */
+          width: 200%;
+          display: flex;
+        }
+      `}</style>
 
-      {/* --- Section Divider --- */}
-      
-      {/* School Vision and Overview */}
-      <section className="py-16 px-6 md:px-12 bg-white">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
+      {/* ---------------- HERO SECTION ---------------- */}
+      <div className="relative h-[40vh] overflow-hidden bg-slate-900 rounded-b-[2.5rem] shadow-2xl z-10">
+        
+        {/* Infinite Scrolling Background */}
+        <div className="absolute inset-0 flex items-center opacity-60">
+           <div className="animate-scroll-strip">
+             {[...IMAGES, ...IMAGES].map((img, idx) => (
+               <div key={`img-${idx}`} className="w-full h-full flex-shrink-0 px-0.5">
+                 <img src={img} className="w-full h-full object-cover" alt="Hostel View" />
+               </div>
+             ))}
+           </div>
+        </div>
+
+        {/* Gradient Overlay & Content */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent">
           
-          {/* Our School Section */}
-          <div className="lg:col-span-1 border-r border-gray-200 pr-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 flex items-center">
-              <span className="text-blue-500 text-4xl mr-3">🏫</span>Our School
-            </h2>
-            <p className="text-gray-600 mb-4 leading-relaxed">
-              Springdale Academy has been a cornerstone of academic excellence for over two decades. We are dedicated to providing a balanced education that encourages critical thinking, creativity, and ethical responsibility in every student.
-            </p>
-            <p className="text-gray-600 leading-relaxed">
-              Our modern campus and experienced faculty create an environment where every student can achieve their personal best.
-            </p>
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-1.5 rounded-full mb-4 shadow-lg">
+            <span className="text-white text-xs font-bold tracking-widest uppercase">
+              Admin Portal
+            </span>
           </div>
 
-          {/* Vision Section */}
-          <div className="lg:col-span-2">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 flex items-center">
-              <span className="text-blue-500 text-4xl mr-3">✨</span>Our Vision & Mission
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="p-6 bg-blue-50 rounded-lg shadow-sm">
-                <h3 className="text-xl font-semibold text-blue-700 mb-2">Vision</h3>
-                <p className="text-gray-700">
-                  To be a premier educational institution recognized globally for academic rigor, innovation in teaching, and commitment to holistic student development.
-                </p>
-              </div>
-              <div className="p-6 bg-cyan-50 rounded-lg shadow-sm">
-                <h3 className="text-xl font-semibold text-cyan-700 mb-2">Mission</h3>
-                <p className="text-gray-700">
-                  To empower students with the skills, knowledge, and moral compass necessary to succeed as leaders and contributing members of society in the 21st century.
-                </p>
-              </div>
+          <h1 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">
+            Springdale Hostel
+          </h1>
+          <p className="text-slate-200 text-sm max-w-[200px] mb-6 font-light leading-relaxed">
+            Manage attendance and resident details with ease.
+          </p>
+          
+          {/* Main Action Button */}
+          <Link 
+            to="/login" 
+            className="group relative inline-flex items-center justify-center px-8 py-3 bg-white text-indigo-700 font-bold rounded-xl shadow-xl transition-all duration-200 active:scale-95 hover:shadow-2xl"
+          >
+            <span>Manage Residents</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
+          </Link>
+        </div>
+      </div>
+
+      {/* ---------------- DATA TABLE CARD ---------------- */}
+      <section className="flex-grow px-5 -mt-8 z-20">
+        <div className="max-w-xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+          
+          {/* Card Header */}
+          <div className="px-6 py-5 border-b border-slate-100 bg-white flex justify-between items-center">
+            <div>
+              <h2 className="text-lg font-bold text-slate-800">Occupancy</h2>
+              <p className="text-xs text-slate-400 font-medium mt-0.5">Live resident count</p>
             </div>
+            <div className="bg-indigo-50 text-indigo-700 p-2 rounded-lg">
+               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                 <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+               </svg>
+            </div>
+          </div>
+
+          {/* Table */}
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead>
+                <tr className="bg-slate-50/50">
+                  <th className="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                    S.No
+                  </th>
+                  <th className="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                    Class Category
+                  </th>
+                  <th className="px-5 py-3 text-right text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                    Residents
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {HOSTEL_STRENGTH.map((row, index) => (
+                  <tr key={row.id} className="group hover:bg-slate-50 transition-colors duration-150">
+                    <td className="px-5 py-4 whitespace-nowrap text-xs font-semibold text-slate-400 group-hover:text-indigo-500">
+                      {(index + 1).toString().padStart(2, '0')}
+                    </td>
+                    <td className="px-5 py-4 whitespace-nowrap">
+                      <span className="text-sm font-bold text-slate-700 group-hover:text-slate-900">
+                        {row.className}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4 whitespace-nowrap text-right">
+                      <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 text-xs font-bold group-hover:bg-indigo-100 transition-colors">
+                        {row.strength}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+                
+                {/* Total Row (Styled as a Summary Footer) */}
+                <tr className="bg-slate-800 text-white">
+                  <td className="px-5 py-4 text-xs font-medium text-slate-400">
+                    --
+                  </td>
+                  <td className="px-5 py-4 text-sm font-bold tracking-wide uppercase">
+                    Total Strength
+                  </td>
+                  <td className="px-5 py-4 text-right text-lg font-bold text-white">
+                    {totalStudents}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
 
-      {/* --- Section Divider --- */}
-
-      {/* Contact Section */}
-      <section className="py-12 px-6 bg-gray-100">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">
-            Contact & Location
-          </h2>
-          <div className="flex flex-wrap justify-center gap-8 text-lg text-gray-700">
-            <div className="flex items-center">
-              <span className="text-blue-500 mr-2">📞</span> (555) 123-4567
-            </div>
-            <div className="flex items-center">
-              <span className="text-blue-500 mr-2">📧</span> info@springdaleacademy.edu
-            </div>
-            <div className="flex items-center">
-              <span className="text-blue-500 mr-2">📍</span> 456 Education Lane, Metropolis, 10001
-            </div>
-          </div>
-          <button onClick={() => window.location.href = '/'} className="mt-8 bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-700 transition">
-            Send an Inquiry
-          </button>
-        </div>
-      </section>
     </div>
   );
 }

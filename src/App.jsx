@@ -1,7 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import About from "./pages/About";
 import Students from "./pages/Students";
 import ClassStudents from "./pages/ClassStudents";
 import StudentProfile from "./pages/StudentProfile";
@@ -17,21 +16,23 @@ import Other from "./pages/admin/Other";
 function App() {
   return (
     <AuthProvider>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/students" element={<Students />} />
-        <Route path="/students/:classId" element={<ClassStudents />} />
-        <Route path="/students/profile/:studentId" element={<StudentProfile />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/admin" element={<AdminHome />} />
-        <Route path="/other-admin" element={<Other />} />
-        {/* In your App.jsx or routing file */}
-        <Route path="/idcard/:studentId" element={<IdCard />} />
-      </Routes>
-      <Footer />
+      <div className="min-h-screen bg-gray-100 pb-20 lg:pb-0">
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/students" element={<Students />} />
+          <Route path="/students/:classId" element={<ClassStudents />} />
+          <Route path="/students/profile/:studentId" element={<StudentProfile />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/admin" element={<AdminHome />} />
+          <Route path="/other-admin" element={<Other />} />
+          {/* In your App.jsx or routing file */}
+          <Route path="/idcard/:studentId" element={<IdCard />} />
+        </Routes>
+        {/* <Footer /> */}
+      </div>
+      
     </AuthProvider>
   );
 }

@@ -11,12 +11,19 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/cli": "^7.4.4",
+    "@capacitor/core": "^7.4.4",
+    "@capacitor/filesystem": "^7.1.6",
+    "@capacitor/ios": "^7.4.3",
+    "@capacitor/share": "^7.0.3",
     "@tailwindcss/vite": "^4.1.13",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.7.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "html2pdf.js": "^0.12.1",
     "mongoose": "^8.18.2",
     "multer": "^2.0.2",
     "react": "^19.1.1",
@@ -27,6 +34,7 @@
     "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@eslint/js": "^9.36.0",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",

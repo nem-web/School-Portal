@@ -1,0 +1,9 @@
+{
+  "appId": "com.school.portal",
+  "appName": "School Portal",
+  "webDir": "build",
+  "server": {
+    "url": "https://sv-pddu.vercel.app",
+    "cleartext": true
+  }
+}

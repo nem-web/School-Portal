@@ -11,6 +11,7 @@ import path from 'path';
 import connectDB from './db.js';
 import Student from './model/Student.js';
 import User, { seedUsers } from './model/User.js';
+import { generateSerial } from './classUtils.js';
 
 import { v2 as cloudinary } from 'cloudinary';
 
@@ -95,13 +96,7 @@ app.post(
       const name = bodyData.name || '';
       const dob = bodyData.dob || '';
 
-      let serialNumber = '';
-      if (admissionYear && name && dob) {
-        const namePart = name.trim().toUpperCase().replace(/\s+/g, '').slice(0, 4);
-        const dobPart = dob.replace(/-/g, '');
-        const dobFormatted = dobPart.slice(6, 8) + dobPart.slice(4, 6) + dobPart.slice(0, 4);
-        serialNumber = `${admissionYear}${namePart}${dobFormatted}`;
-      }
+      let serialNumber = generateSerial(admissionYear,name, bodyData.classRoll || 0, dob);
 
       const studentData = {
         name: bodyData.name,
@@ -221,10 +216,7 @@ app.put(
         const admissionYear = bodyData.admissionYear ?? existing.admissionYear;
         const name = bodyData.name ?? existing.name;
         const dob = bodyData.dob ?? existing.dob;
-        const namePart = (name || '').trim().toUpperCase().replace(/\s+/g, '').slice(0, 4);
-        const dobPart = (dob || '').replace(/-/g, '');
-        const dobFormatted = dobPart ? dobPart.slice(6, 8) + dobPart.slice(4, 6) + dobPart.slice(0, 4) : '';
-        update.serialNumber = admissionYear && namePart && dobFormatted ? `${admissionYear}${namePart}${dobFormatted}` : existing.serialNumber;
+        update.serialNumber = generateSerial(admissionYear, name, bodyData.classRoll || 0, dob);
       }
 
       if (files['studentPhoto']) {
