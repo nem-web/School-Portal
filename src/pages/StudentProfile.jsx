@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { generateStudentPDF } from "../utils/pdf";
+// import { generateStudentPDF } from "../utils/pdf";
 
 // --- Icons ---
 const PhoneIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" /></svg>;
@@ -45,6 +45,11 @@ export default function StudentProfile() {
 
   // Filter parents
   const validParents = student?.parents?.filter(p => p.name && p.name.trim() !== "") || [];
+
+  const openPDF = () => {
+    window.open(`${BASE_URL}/students/${studentId}/pdf`, "_blank");
+  };
+
 
   // --- Helpers ---
   const InfoRow = ({ label, value, fullWidth = false }) => (
@@ -145,7 +150,7 @@ export default function StudentProfile() {
 
                         {/* Screen Buttons */}
                         <div className="mt-6 flex flex-col gap-2">
-                            <button onClick={() => generateStudentPDF(student.name)} className="w-full flex items-center justify-center gap-1.5 bg-indigo-600 text-white py-2 rounded-lg text-sm font-semibold shadow-sm hover:bg-indigo-700 transition-all active:scale-[0.98]">
+                            <button onClick={openPDF} className="w-full flex items-center justify-center gap-1.5 bg-indigo-600 text-white py-2 rounded-lg text-sm font-semibold shadow-sm hover:bg-indigo-700 transition-all active:scale-[0.98]">
                                 <PrintIcon /> Download Profile PDF
                             </button>
                             {user?.isAdmin && (
@@ -168,7 +173,7 @@ export default function StudentProfile() {
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <InfoRow label="Date of Birth" value={new Date(student.dob).toLocaleDateString()} />
-                        <InfoRow label="Mobile Number" value={student.mobileNo} />
+                        <InfoRow label="Aadhar Number" value={student.aadharNo} />
                         <InfoRow label="Admission Year" value={student.admissionYear} />
                         <InfoRow label="Caste" value={student.caste} />
                     </div>
@@ -223,115 +228,6 @@ export default function StudentProfile() {
         </div>
       </main>
 
-      {/* =================================================================================== */}
-      {/* 2. HIDDEN PRINT LAYOUT (A4 Formatted)                                               */}
-      {/* This is what actually gets captured by html2pdf                                  */}
-      {/* =================================================================================== */}
-      
-      <div 
-        id="print-area" 
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '794px',
-          backgroundColor: '#ffffff',
-          padding: '40px',
-          zIndex: -1,
-          opacity: 0,
-          pointerEvents: 'none'
-        }}
-
-      >
-        {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', borderBottom: '2px solid #e2e8f0', paddingBottom: '20px', marginBottom: '30px' }}>
-            <div style={{ width: '120px', height: '120px', marginRight: '20px', borderRadius: '10px', overflow: 'hidden', border: '1px solid #cbd5e1' }}>
-                <img 
-                    src={student.studentPhoto || "https://via.placeholder.com/150"} 
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                    crossOrigin="anonymous" 
-                    alt="Student"
-                />
-            </div>
-            <div>
-                <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#1e1b4b', margin: 0 }}>{student.name}</h1>
-                <p style={{ fontSize: '18px', color: '#4f46e5', margin: '5px 0 0 0', fontWeight: '600' }}>Class: {student.class}</p>
-                <div style={{ display: 'inline-block', backgroundColor: '#f1f5f9', padding: '4px 12px', borderRadius: '20px', fontSize: '14px', marginTop: '8px', fontWeight: 'bold', color: '#64748b' }}>
-                    SERIAL NO: {student.serialNumber}
-                </div>
-            </div>
-            <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
-                <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: '#334155' }}>STUDENT PROFILE</h2>
-                <p style={{ fontSize: '12px', color: '#94a3b8' }}>Generated: {new Date().toLocaleDateString()}</p>
-            </div>
-        </div>
-
-        {/* Section: Personal Info */}
-        <div style={{ marginBottom: '30px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 'bold', textTransform: 'uppercase', color: '#475569', borderLeft: '4px solid #6366f1', paddingLeft: '10px', marginBottom: '15px' }}>
-                Personal Information
-            </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                <PrintField label="Date of Birth" value={new Date(student.dob).toLocaleDateString()} />
-                <PrintField label="Mobile Number" value={student.mobileNo} />
-                <PrintField label="Admission Year" value={student.admissionYear} />
-                <PrintField label="Caste" value={student.caste} />
-            </div>
-        </div>
-
-        {/* Section: Address */}
-        <div style={{ marginBottom: '30px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 'bold', textTransform: 'uppercase', color: '#475569', borderLeft: '4px solid #14b8a6', paddingLeft: '10px', marginBottom: '15px' }}>
-                Address Details
-            </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                <PrintField label="Full Address" value={student.address} fullWidth />
-                <PrintField label="Village" value={student.village} />
-                <PrintField label="Block" value={student.block} />
-                <PrintField label="District" value={student.district} />
-                <PrintField label="State" value={student.state} />
-            </div>
-        </div>
-
-        {/* Section: Guardians */}
-        {validParents.length > 0 && (
-            <div style={{ marginBottom: '30px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 'bold', textTransform: 'uppercase', color: '#475569', borderLeft: '4px solid #f97316', paddingLeft: '10px', marginBottom: '15px' }}>
-                    Guardian Information
-                </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                    {validParents.map((p, idx) => (
-                        <div key={idx} style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '15px', backgroundColor: '#f8fafc', display: 'flex', alignItems: 'center' }}>
-                            {p.photo && (
-                                <div style={{ width: '60px', height: '60px', borderRadius: '50%', overflow: 'hidden', marginRight: '15px', border: '2px solid #fff', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                                    <img src={p.photo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} crossOrigin="anonymous" alt="Guardian" />
-                                </div>
-                            )}
-                            <div>
-                                <p style={{ margin: 0, fontWeight: 'bold', color: '#334155', fontSize: '14px' }}>{p.name}</p>
-                                <p style={{ margin: '2px 0', fontSize: '12px', fontWeight: 'bold', color: '#6366f1', textTransform: 'uppercase' }}>{p.relation}</p>
-                                <p style={{ margin: 0, fontSize: '12px', color: '#64748b' }}>Ph: {p.mobileNo || "N/A"}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        )}
-
-        {/* Footer */}
-        <div style={{ marginTop: '50px', textAlign: 'center', fontSize: '12px', color: '#cbd5e1', borderTop: '1px solid #f1f5f9', paddingTop: '10px' }}>
-            <p>School Portal System - Confidential Student Record</p>
-        </div>
-      </div>
-
     </div>
   );
 }
-
-// Simple Helper for Print Layout Fields
-const PrintField = ({ label, value, fullWidth }) => (
-    <div style={{ gridColumn: fullWidth ? 'span 2' : 'span 1' }}>
-        <p style={{ margin: 0, fontSize: '10px', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 'bold' }}>{label}</p>
-        <p style={{ margin: '2px 0 0 0', fontSize: '14px', color: '#1e293b', fontWeight: '500' }}>{value || "—"}</p>
-    </div>
-);

@@ -14,6 +14,8 @@ import User, { seedUsers } from './model/User.js';
 import { generateSerial } from './classUtils.js';
 
 import { v2 as cloudinary } from 'cloudinary';
+import studentPdfRoute from "./routes/studentPdf.js";
+
 
 dotenv.config();
 
@@ -43,6 +45,8 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://sv-pddu.vercel.app"
 ];
+
+app.use("/api", studentPdfRoute);
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -102,7 +106,7 @@ app.post(
         name: bodyData.name,
         dob: bodyData.dob,
         caste: bodyData.caste,
-        mobileNo: bodyData.mobileNo,
+        aadharNo: bodyData.aadharNo,
         admissionYear,
         address: bodyData.address,
         village: bodyData.village,
@@ -197,7 +201,7 @@ app.put(
         name: bodyData.name ?? existing.name,
         dob: bodyData.dob ?? existing.dob,
         caste: bodyData.caste ?? existing.caste,
-        mobileNo: bodyData.mobileNo ?? existing.mobileNo,
+        aadharNo: bodyData.aadharNo ?? existing.aadharNo,
         admissionYear: bodyData.admissionYear ?? existing.admissionYear,
         address: bodyData.address ?? existing.address,
         village: bodyData.village ?? existing.village,
@@ -369,4 +373,4 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`Server running`));
+app.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
