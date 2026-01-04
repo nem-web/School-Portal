@@ -12,7 +12,7 @@ const parentSchema = new mongoose.Schema({
 // Student schema
 const studentSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  mobileNo: String,
+  aadharNo: String, 
   dob: String,
   caste: String,
   address: String,

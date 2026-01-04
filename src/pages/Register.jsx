@@ -182,7 +182,7 @@ export default function Register() {
   const studentData = location.state?.studentData; 
 
   const [formData, setFormData] = useState({
-    name: "", dob: "", class: "6", caste: "", mobileNo: "", admissionYear: new Date().getFullYear().toString(),
+    name: "", dob: "", class: "6", caste: "", aadharNo: "", admissionYear: new Date().getFullYear().toString(),
     address: "", village: "", block: "", district: "", state: "",
     studentPhoto: null,
     parents: [
@@ -327,7 +327,7 @@ export default function Register() {
                     </select>
                   </div>
 
-                  <InputField label="Contact Number" name="mobileNo" value={formData.mobileNo} onChange={handleChange} placeholder="555 555 5555" disabled={loading} />
+                  <InputField label="Aadhar Number" name="aadharNo" value={formData.aadharNo} onChange={handleChange} placeholder="0000 0000 0000" disabled={loading} />
                   <InputField label="Admission Year" name="admissionYear" type="number" value={formData.admissionYear} onChange={handleChange} required disabled={loading} />
 
                   <div>
