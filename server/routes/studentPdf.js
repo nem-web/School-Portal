@@ -1,7 +1,8 @@
 import express from "express";
 import fs from "fs";
 import path from "path";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import chromium from "chromium";
 import Student from "../model/Student.js";
 import { fileURLToPath } from "url";
 
@@ -82,9 +83,11 @@ router.get("/students/:id/pdf", async (req, res) => {
 
     // 5. Puppeteer Generation
     const browser = await puppeteer.launch({
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      headless: "new",
+      args: chromium.args,
+      executablePath: chromium.path,
+      headless: chromium.headless,
     });
+
 
     const page = await browser.newPage();
     
