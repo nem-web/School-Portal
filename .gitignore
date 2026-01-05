@@ -13,6 +13,8 @@ dist-ssr
 *.local
 .env
 android
+*.jks
+
 
 # Editor directories and files
 .vscode/*
